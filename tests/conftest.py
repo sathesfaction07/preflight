@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import importlib.metadata as _md
 import sys
 from pathlib import Path
 
@@ -61,3 +62,18 @@ def side_effect_module(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> tuple
     monkeypatch.syspath_prepend(str(tmp_path))
     monkeypatch.delitem(sys.modules, name, raising=False)
     return name, marker
+
+
+@pytest.fixture(scope="session")
+def absent_table_entry() -> tuple[str, str]:
+    """A KNOWN_DIFFERENT distribution that is NOT installed in this environment, with its
+    module. The table is the only source of an answer for an absent distribution, so the
+    tests that exercise it need one -- and which ones are absent depends on the machine."""
+    from tool_hub.naming import KNOWN_DIFFERENT
+
+    for distribution, module in KNOWN_DIFFERENT.items():
+        try:
+            _md.distribution(distribution)
+        except _md.PackageNotFoundError:
+            return distribution, module
+    pytest.skip("every distribution in the table is installed here")

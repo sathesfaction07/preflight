@@ -120,13 +120,17 @@ class TestNaming:
         assert "Two NAMESPACES, not two spellings" in output
         assert "UNSATISFIABLE" in output
 
-    def test_it_says_where_each_answer_came_from(self, runner: CliRunner) -> None:
-        output = runner.invoke(cli, ["naming", "pydantic", "scikit-learn"]).output
+    def test_it_says_where_each_answer_came_from(
+        self, runner: CliRunner, absent_table_entry: tuple[str, str]
+    ) -> None:
+        output = runner.invoke(cli, ["naming", "pydantic", absent_table_entry[0]]).output
         assert "metadata" in output
         assert "table" in output
 
-    def test_it_states_the_circularity(self, runner: CliRunner) -> None:
-        output = flat(runner.invoke(cli, ["naming", "scikit-learn"]).output)
+    def test_it_states_the_circularity(
+        self, runner: CliRunner, absent_table_entry: tuple[str, str]
+    ) -> None:
+        output = flat(runner.invoke(cli, ["naming", absent_table_entry[0]]).output)
         assert "needs the answer in order to ask the question" in output
 
     def test_it_admits_the_sound_route_is_not_universal(self, runner: CliRunner) -> None:

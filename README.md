@@ -1,12 +1,18 @@
 # ToolHub
 
-Launches local tools, and says how much its "this will run" actually means.
+"This tool will run" is a prediction about a process that has not started yet. ToolHub launches
+local tools, and first says how strong that prediction is: declared, present on disk,
+importable here, or importable in the tool's own interpreter. Each check costs more than the
+one below it, none proves the next, and the launcher reports which one it reached.
 
-No model. The accuracy problem is import semantics and arithmetic.
+It also catches a widespread mistake: `importlib.util.find_spec(X) is None` used as a
+dependency check proves that a module is present, not that importing it will work.
 
 ---
 
-## The Brief Says the Accuracy Concern Is "N/A"
+## A Launcher Has an Accuracy Problem After All
+
+The planning note for this tool said:
 
 > **Accuracy concern:** N/A — it's a launcher.
 > **Verdict:** Local-only. Error handling + dependency checks.

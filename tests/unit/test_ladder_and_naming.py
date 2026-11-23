@@ -194,10 +194,13 @@ class TestResolutionSources:
         assert result.authoritative
         assert result.module
 
-    def test_the_table_is_used_only_when_metadata_cannot_answer(self) -> None:
-        result = resolve("scikit-learn")
+    def test_the_table_is_used_only_when_metadata_cannot_answer(
+        self, absent_table_entry: tuple[str, str]
+    ) -> None:
+        distribution, module = absent_table_entry
+        result = resolve(distribution)
         assert result.resolution is Resolution.TABLE
-        assert result.module == "sklearn"
+        assert result.module == module
         assert not result.authoritative
         assert "goes stale" in result.detail
 
@@ -222,10 +225,10 @@ class TestResolutionSources:
         assert result.resolution is Resolution.UNRESOLVED
         assert result.module is None
 
-    def test_every_resolution_source_occurs(self) -> None:
+    def test_every_resolution_source_occurs(self, absent_table_entry: tuple[str, str]) -> None:
         seen = {
             resolve(n).resolution
-            for n in ("pydantic", "scikit-learn", "some_unknown_thing", "not a name!")
+            for n in ("pydantic", absent_table_entry[0], "some_unknown_thing", "not a name!")
         }
         assert seen == set(Resolution)
 
@@ -235,12 +238,16 @@ class TestResolutionSources:
 
 
 class TestTheCircularity:
-    def test_metadata_answers_only_for_an_installed_distribution(self) -> None:
+    def test_metadata_answers_only_for_an_installed_distribution(
+        self, absent_table_entry: tuple[str, str]
+    ) -> None:
         assert from_metadata("pydantic") is not None
-        assert from_metadata("scikit-learn") is None
+        assert from_metadata(absent_table_entry[0]) is None
 
-    def test_the_note_says_the_check_needs_the_answer_to_ask_the_question(self) -> None:
-        absent = circularity_note("scikit-learn")
+    def test_the_note_says_the_check_needs_the_answer_to_ask_the_question(
+        self, absent_table_entry: tuple[str, str]
+    ) -> None:
+        absent = circularity_note(absent_table_entry[0])
         assert "NOT installed" in absent
         assert "needs the answer in order to ask the question" in absent
 

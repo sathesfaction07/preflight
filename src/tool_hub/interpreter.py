@@ -23,6 +23,18 @@ from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
 
+
+def is_path(declared: str) -> bool:
+    """A path names one file; anything else is a NAME that PATH resolves. Both separators
+    count: checking only "/" treated every Windows path (C:\\...\\python.exe) as a bare name."""
+    return "/" in declared or "\\" in declared
+
+
+_PATH_NOTE = (
+    ". Declared as a NAME, so this is whatever PATH points at today -- a different "
+    "shell, user or cron environment can resolve it elsewhere"
+)
+
 #: A probe that reports what an interpreter actually is, run inside it. Deliberately minimal:
 #: anything more would be a program that could itself fail for unrelated reasons.
 _IDENTIFY = (
@@ -57,7 +69,7 @@ class Interpreter(BaseModel):
     def declared_by_name(self) -> bool:
         """A bare name is resolved through PATH, so it is a different kind of promise from a
         path -- it names whatever PATH says today."""
-        return bool(self.declared) and "/" not in self.declared
+        return bool(self.declared) and not is_path(self.declared)
 
 
 def identify(path: str, timeout: float = 10.0) -> tuple[str, str, str] | None:
@@ -96,7 +108,7 @@ def resolve(declared: str) -> Interpreter:
             ),
         )
 
-    located = declared if "/" in declared else shutil.which(declared)
+    located = declared if is_path(declared) else shutil.which(declared)
     if located is None or not Path(located).exists():
         return Interpreter(
             declared=declared,
@@ -113,15 +125,15 @@ def resolve(declared: str) -> Interpreter:
         return Interpreter(
             declared=declared,
             resolved=located,
-            detail=f"{located!r} exists but would not answer a version query",
+            detail=(
+                f"{located!r} exists but would not answer a version query"
+                + ("" if is_path(declared) else _PATH_NOTE)
+            ),
         )
 
     note = f"resolved {declared!r} to {located}, python {found[0]}"
-    if "/" not in declared:
-        note += (
-            ". Declared as a NAME, so this is whatever PATH points at today -- a different "
-            "shell, user or cron environment can resolve it elsewhere"
-        )
+    if not is_path(declared):
+        note += _PATH_NOTE
     return Interpreter(
         declared=declared,
         resolved=located,
