@@ -1,0 +1,24 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+.env
+out/
+output/
+
+# Written by the corpus fixtures when an import-based discovery pass runs them.
+data/tools/IMPORT_SIDE_EFFECT
+
+.DS_Store
+.idea/
+.vscode/

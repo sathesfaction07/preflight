@@ -1,0 +1,63 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.9
+    hooks:
+      - id: ruff
+        args: [--fix]
+        exclude: ^data/tools/
+      - id: ruff-format
+        exclude: ^data/tools/
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: ^data/tools/
+      - id: end-of-file-fixer
+        exclude: ^data/tools/
+      - id: check-yaml
+      - id: check-toml
+      - id: check-added-large-files
+        args: [--maxkb=500]
+      - id: check-merge-conflict
+      # NOTE: check-ast is deliberately NOT enabled. One corpus fixture is unparseable on
+      # purpose, and a launcher's whole job is coping with tools it did not write.
+
+  - repo: local
+    hooks:
+      # The corpus must keep producing every outcome the tests assert about. A missing case
+      # makes those assertions VACUOUS rather than failing, which is the quiet way a corpus
+      # stops testing anything. This also catches the real incident that prompted it: nine
+      # stale fixtures written to an older field convention, parsing as tools with empty
+      # metadata and no error anywhere.
+      - id: corpus-still-exercises-every-case
+        name: the corpus still produces every documented outcome
+        entry: >
+          python -c "import sys; sys.path[:0] = ['src', 'data'];
+          from pathlib import Path;
+          from generate import MODULES, PLANTED;
+          from tool_hub.discover import compare, discover_static;
+          from tool_hub.registry import build;
+          from tool_hub.usage import load;
+          tools = Path('data/tools');
+          on_disk = {p.stem for p in tools.glob('*.py')};
+          assert on_disk == set(MODULES), f'directory does not match the manifest: {on_disk ^ set(MODULES)}';
+          assert not set(PLANTED) - set(MODULES), 'a planted case is gone';
+          r = build(tools, load(Path('data/usage.json')));
+          assert r.unsatisfiable, 'no unsatisfiable requirement left';
+          assert r.malformed, 'no malformed declaration left';
+          assert r.unevaluated, 'no computed metadata left';
+          assert r.missing_interpreters, 'no missing interpreter left';
+          assert r.substituted_interpreters, 'no interpreter-less tool left';
+          assert r.lost, 'no unparseable module left';
+          assert any(x.probably_binaries for x in r.reports), 'no binary requirement left';
+          assert r.never_launched, 'no unlogged tool left';
+          assert not r.ranking.orders_agree, 'the two rankings no longer disagree';
+          c = compare(tools);
+          assert c.only_static, 'no tool that importing loses';
+          assert c.differing_metadata, 'no field the two passes read differently';
+          assert not discover_static(tools).executed_code;
+          print(f'{len(r.reports)} tools, {len(r.unsatisfiable)} unsatisfiable, all outcomes present')"
+        language: system
+        pass_filenames: false
+        files: ^(data/|src/tool_hub/(discover|registry|naming)\.py)

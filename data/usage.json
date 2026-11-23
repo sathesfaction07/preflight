@@ -1,0 +1,37 @@
+[
+  {
+    "name": "csv-merge",
+    "launched": 41,
+    "succeeded": 39
+  },
+  {
+    "name": "date-shift",
+    "launched": 58,
+    "succeeded": 4
+  },
+  {
+    "name": "json-lint",
+    "launched": 37,
+    "succeeded": 36
+  },
+  {
+    "name": "log-tail",
+    "launched": 12,
+    "succeeded": 12
+  },
+  {
+    "name": "resize-images",
+    "launched": 44,
+    "succeeded": 6
+  },
+  {
+    "name": "scrape-table",
+    "launched": 9,
+    "succeeded": 8
+  },
+  {
+    "name": "transcode-video",
+    "launched": 6,
+    "succeeded": 0
+  }
+]
