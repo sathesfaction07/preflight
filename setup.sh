@@ -181,11 +181,11 @@ PY
 
 echo
 echo "==> what the launcher can honestly say"
-.venv/bin/tool-hub report 2>&1 | tail -14 || true
+.venv/bin/preflight report 2>&1 | tail -14 || true
 
 echo
 echo "==> check: fails only on what a tool's author can fix in their own source"
-.venv/bin/tool-hub check 2>&1 | tail -14 || true
+.venv/bin/preflight check 2>&1 | tail -14 || true
 
 echo
 echo "==> tests"
@@ -194,4 +194,4 @@ rm -f .coverage
 
 echo
 echo "Done. Nothing above needed a network or a credential."
-echo "Try: .venv/bin/tool-hub ladder"
+echo "Try: .venv/bin/preflight ladder"

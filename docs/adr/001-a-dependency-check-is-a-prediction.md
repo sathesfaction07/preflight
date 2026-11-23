@@ -57,7 +57,7 @@ There is no cheap sound check: you choose between blind-and-free and sound-and-i
 ### And the answer belongs to an interpreter, not a machine
 
 ```
-True   .../tool-hub/.venv/bin/python
+True   .../preflight/.venv/bin/python
 True   .../mise/installs/python/3.12.11/bin/python3
 False  /usr/bin/python3
 False  /usr/local/bin/python3

@@ -3,7 +3,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "tool-hub"
+name = "preflight"
 version = "0.1.0"
 description = "A launcher that says how much its 'this will run' actually means"
 requires-python = ">=3.11"
@@ -22,7 +22,7 @@ dev = [
 ]
 
 [project.scripts]
-tool-hub = "tool_hub.cli:cli"
+preflight = "tool_hub.cli:cli"
 
 [tool.setuptools.packages.find]
 where = ["src"]

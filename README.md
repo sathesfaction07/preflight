@@ -1,6 +1,6 @@
-# ToolHub
+# Preflight
 
-"This tool will run" is a prediction about a process that has not started yet. ToolHub launches
+"This tool will run" is a prediction about a process that has not started yet. Preflight launches
 local tools, and first says how strong that prediction is: declared, present on disk,
 importable here, or importable in the tool's own interpreter. Each check costs more than the
 one below it, none proves the next, and the launcher reports which one it reached.
@@ -81,7 +81,7 @@ no cheap sound check — only blind-and-free or sound-and-irreversible.
 
 ```
 the same question -- is `pydantic` present? -- asked in 5 interpreters:
-  True   .../tool-hub/.venv/bin/python
+  True   .../preflight/.venv/bin/python
   True   .../mise/installs/python/3.12.11/bin/python3
   True   .../mise/installs/python/3.12.11/bin/python
   False  /usr/bin/python3
@@ -202,19 +202,19 @@ identical in the ranking.
 bash setup.sh                    # re-derives every finding above
 source .venv/bin/activate
 
-tool-hub doctor                  # config, and which claims are weaker than a spec
-tool-hub ladder                  # what each rung costs and what it leaves open
-tool-hub probe json              # one requirement, every rung, answers compared
-tool-hub probe python-dateutil
-tool-hub naming                  # where each name resolution came from
-tool-hub discover                # list the tools WITHOUT running them
-tool-hub discover --run-imports  # and compare against importing them
-tool-hub interpreters            # which python each tool gets
-tool-hub usage                   # two rankings, and where they disagree
-tool-hub report -o out/
-tool-hub check                   # exit 1 on what a tool's author can fix
-tool-hub explain date_shift
-tool-hub launch csv_merge        # says what a launch would predict. Does not launch
+preflight doctor                  # config, and which claims are weaker than a spec
+preflight ladder                  # what each rung costs and what it leaves open
+preflight probe json              # one requirement, every rung, answers compared
+preflight probe python-dateutil
+preflight naming                  # where each name resolution came from
+preflight discover                # list the tools WITHOUT running them
+preflight discover --run-imports  # and compare against importing them
+preflight interpreters            # which python each tool gets
+preflight usage                   # two rankings, and where they disagree
+preflight report -o out/
+preflight check                   # exit 1 on what a tool's author can fix
+preflight explain date_shift
+preflight launch csv_merge        # says what a launch would predict. Does not launch
 ```
 
 | Command | Exit |

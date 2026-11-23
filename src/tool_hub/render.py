@@ -361,5 +361,5 @@ def show_launch(name: str, plan: list[str], refused: str | None) -> None:
         console.print(
             "\n  [yellow]Not launching.[/yellow] This command reports what a launch WOULD do and\n"
             "  what it would be predicting. Running the tool is the one thing that would settle\n"
-            "  the question, and it is not a check -- see `tool-hub ladder`.\n"
+            "  the question, and it is not a check -- see `preflight ladder`.\n"
         )

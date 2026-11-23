@@ -43,7 +43,7 @@ jobs:
         run: pytest -q --cov=tool_hub --cov-report=term-missing
 
       - name: Doctor runs with no network and no credentials
-        run: tool-hub doctor
+        run: preflight doctor
 
       - name: The ladder is ordered and its top rung is not a check
         run: |
@@ -362,7 +362,7 @@ jobs:
 
       - name: The report publishes a ceiling and never says ready
         run: |
-          tool-hub report -o /tmp/out || true
+          preflight report -o /tmp/out || true
           python - <<'PY'
           import json
 
@@ -402,15 +402,15 @@ jobs:
 
       - name: check gates on what an author can fix, not on the world
         run: |
-          ! tool-hub check
-          tool-hub check | grep -q 'written in the distribution namespace'
-          tool-hub check | grep -q 'date_shift:python-dateutil'
-          tool-hub check | grep -q 'wrong shape, which evaluate and are still unusable'
-          tool-hub check | grep -q 'no pass can read'
-          tool-hub check | grep -q 'declare an interpreter that is not here'
-          tool-hub check | grep -q 'Reported and NOT failed on'
-          tool-hub check | grep -q 'switched off inside a week'
-          tool-hub check | grep -q 'FAIL'
+          ! preflight check
+          preflight check | grep -q 'written in the distribution namespace'
+          preflight check | grep -q 'date_shift:python-dateutil'
+          preflight check | grep -q 'wrong shape, which evaluate and are still unusable'
+          preflight check | grep -q 'no pass can read'
+          preflight check | grep -q 'declare an interpreter that is not here'
+          preflight check | grep -q 'Reported and NOT failed on'
+          preflight check | grep -q 'switched off inside a week'
+          preflight check | grep -q 'FAIL'
 
           # A tool whose dependency is genuinely ABSENT still passes, because a missing
           # package is not something a tool's author can fix in their own source.
@@ -420,57 +420,57 @@ jobs:
           TOOL_REQUIREMENTS = ["definitely_not_installed_xyz"]
           TOOL_INTERPRETER = "python3"
           TOOL
-          TH_TOOLS=/tmp/clean tool-hub check
-          TH_TOOLS=/tmp/clean tool-hub check | grep -q 'Nothing fixable at source'
-          TH_TOOLS=/tmp/clean tool-hub check | grep -q 'still a prediction'
-          TH_TOOLS=/tmp/clean tool-hub check | grep -q PASS
+          TH_TOOLS=/tmp/clean preflight check
+          TH_TOOLS=/tmp/clean preflight check | grep -q 'Nothing fixable at source'
+          TH_TOOLS=/tmp/clean preflight check | grep -q 'still a prediction'
+          TH_TOOLS=/tmp/clean preflight check | grep -q PASS
 
           # ...but a requirement in the wrong NAMESPACE does fail, because that is fixable.
           mkdir -p /tmp/wrongns
           printf 'TOOL_NAME = "x"\nTOOL_REQUIREMENTS = ["python-dateutil"]\nTOOL_INTERPRETER = "python3"\n' \
             > /tmp/wrongns/x.py
-          ! TH_TOOLS=/tmp/wrongns tool-hub check
+          ! TH_TOOLS=/tmp/wrongns preflight check
           echo "an absent package does not gate; a wrong namespace does"
 
       - name: launch declines to launch, and refuses when it cannot know
         run: |
-          tool-hub launch csv_merge | grep -q 'Not launching'
-          tool-hub launch csv_merge | grep -q 'would settle'
-          tool-hub launch csv_merge | grep -q 'prediction, not a guarantee'
-          ! tool-hub launch date_shift
-          tool-hub launch date_shift | grep -q 'a claim with nothing behind it' || true
-          ! tool-hub launch vendor_sync
-          ! tool-hub launch no_such_tool
+          preflight launch csv_merge | grep -q 'Not launching'
+          preflight launch csv_merge | grep -q 'would settle'
+          preflight launch csv_merge | grep -q 'prediction, not a guarantee'
+          ! preflight launch date_shift
+          preflight launch date_shift | grep -q 'a claim with nothing behind it' || true
+          ! preflight launch vendor_sync
+          ! preflight launch no_such_tool
           echo "launch predicts and declines; it refuses when the evidence is unobtainable"
 
       - name: Every command publishes its reasoning
         run: |
-          tool-hub doctor | grep -q 'none used, ever'
-          tool-hub doctor | grep -q 'listing tools does not run them'
-          tool-hub doctor | grep -q 'import SEMANTICS, verifiable here'
-          tool-hub doctor | grep -q 'resting on PACKAGING behaviour'
-          tool-hub doctor | grep -q 'GUESSES, and go stale'
-          tool-hub doctor | grep -q 'invented, not measured'
-          tool-hub ladder | grep -q 'PREDICTION ABOUT A PROCESS IT IS NOT RUNNING'
-          tool-hub ladder | grep -q 'NONE PROVES THE NEXT'
-          tool-hub ladder | grep -q 'not a check'
-          tool-hub probe json | grep -q 'the dearest question asked'
-          tool-hub probe python-dateutil | grep -q 'UNSATISFIABLE'
-          tool-hub probe git | grep -q 'Strong evidence'
-          tool-hub probe definitely_not_installed_xyz | grep -q 'KIND is unknown'
-          tool-hub naming | grep -q 'Two NAMESPACES, not two'
-          tool-hub naming scikit-learn | grep -q 'unknowable from the system'
-          tool-hub discover | grep -q 'WITHOUT executing anything'
-          tool-hub discover --run-imports | grep -q 'looks healthier than the directory'
-          tool-hub discover --run-imports | grep -q 'the AST KNOWS it cannot say'
-          tool-hub interpreters | grep -q 'SUBSTITUTED'
-          tool-hub interpreters | grep -q 'an environment the tool never asked for'
-          tool-hub usage | grep -q 'does not have one answer'
-          tool-hub usage | grep -q 'failure pushes UP the number'
-          tool-hub usage | grep -q 'cannot tell which of three'
-          tool-hub explain date_shift | grep -q 'no installation makes the check pass'
-          tool-hub explain csv_merge | grep -q 'prediction, not a guarantee'
-          tool-hub explain syntax_error | grep -q 'it IS on disk, and unreadable'
+          preflight doctor | grep -q 'none used, ever'
+          preflight doctor | grep -q 'listing tools does not run them'
+          preflight doctor | grep -q 'import SEMANTICS, verifiable here'
+          preflight doctor | grep -q 'resting on PACKAGING behaviour'
+          preflight doctor | grep -q 'GUESSES, and go stale'
+          preflight doctor | grep -q 'invented, not measured'
+          preflight ladder | grep -q 'PREDICTION ABOUT A PROCESS IT IS NOT RUNNING'
+          preflight ladder | grep -q 'NONE PROVES THE NEXT'
+          preflight ladder | grep -q 'not a check'
+          preflight probe json | grep -q 'the dearest question asked'
+          preflight probe python-dateutil | grep -q 'UNSATISFIABLE'
+          preflight probe git | grep -q 'Strong evidence'
+          preflight probe definitely_not_installed_xyz | grep -q 'KIND is unknown'
+          preflight naming | grep -q 'Two NAMESPACES, not two'
+          preflight naming scikit-learn | grep -q 'unknowable from the system'
+          preflight discover | grep -q 'WITHOUT executing anything'
+          preflight discover --run-imports | grep -q 'looks healthier than the directory'
+          preflight discover --run-imports | grep -q 'the AST KNOWS it cannot say'
+          preflight interpreters | grep -q 'SUBSTITUTED'
+          preflight interpreters | grep -q 'an environment the tool never asked for'
+          preflight usage | grep -q 'does not have one answer'
+          preflight usage | grep -q 'failure pushes UP the number'
+          preflight usage | grep -q 'cannot tell which of three'
+          preflight explain date_shift | grep -q 'no installation makes the check pass'
+          preflight explain csv_merge | grep -q 'prediction, not a guarantee'
+          preflight explain syntax_error | grep -q 'it IS on disk, and unreadable'
           echo "all commands explain themselves"
 
   test-windows:

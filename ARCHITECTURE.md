@@ -1,4 +1,4 @@
-# ToolHub — Technical Architecture
+# Preflight — Technical Architecture
 
 ## Overview
 
@@ -17,7 +17,7 @@ No model. The accuracy problem is import semantics and arithmetic.
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│                            CLI (tool-hub)                                     │
+│                            CLI (preflight)                                     │
 │                                                                              │
 │  doctor        config; and which claims are import SEMANTICS, which rest on    │
 │                PACKAGING behaviour, and which are outright GUESSES            │
@@ -143,7 +143,7 @@ No model. The accuracy problem is import semantics and arithmetic.
 │                                                                              │
 │  FINDING 5 -- the answer belongs to an INTERPRETER, not a machine:            │
 │                                                                              │
-│      True   .../tool-hub/.venv/bin/python                                    │
+│      True   .../preflight/.venv/bin/python                                    │
 │      True   .../mise/installs/python/3.12.11/bin/python3                     │
 │      False  /usr/bin/python3                                                 │
 │      False  /usr/local/bin/python3                                           │
@@ -230,7 +230,7 @@ No model. The accuracy problem is import semantics and arithmetic.
 ## Data Flow
 
 ```
-1.  tool-hub report
+1.  preflight report
 2.  static discovery over 17 modules -> 16 tools, 1 lost (unparseable), NOTHING EXECUTED
 3.  4 fields recorded as computed and unevaluated; 2 recorded as malformed
 4.  per tool: resolve the declared interpreter
