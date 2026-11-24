@@ -8,7 +8,7 @@ TOOL_REQUIREMENTS = ["csv"]
 TOOL_INTERPRETER = "python3"
 
 # A side effect at MODULE level. Nothing here is called; importing is enough.
-Path(__file__).with_name("IMPORT_SIDE_EFFECT").write_text("discovery executed this file\n")
+Path(__file__).with_name("IMPORT_SIDE_EFFECT").write_text("discovery executed this file\n", encoding="utf-8")
 
 
 def main() -> int:
