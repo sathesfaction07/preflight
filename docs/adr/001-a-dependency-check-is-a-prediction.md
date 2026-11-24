@@ -5,7 +5,7 @@
 
 ## Context
 
-The strategy document's entry for this project is the thinnest of the twenty-seven:
+The planning notes' entry for this project is the thinnest of all:
 
 > **Accuracy concern:** N/A — it's a launcher.
 > **Verdict:** Local-only. Error handling + dependency checks.
@@ -41,8 +41,7 @@ IMPORTABLE_HERE     False     True
 ```
 
 `find_spec(m) is None` returns **False** — "available" — for a module that cannot be imported.
-That exact expression is used as a dependency check in three conftest files elsewhere in this
-portfolio.
+That exact expression is used as a dependency check in three conftest files across the sibling projects.
 
 ### The only sound check is an import, and an import is not free
 
@@ -110,4 +109,4 @@ whole point is that the cheap question and the dear question have different answ
 *answer* would hide that the cost was paid.
 
 **Treating `find_spec` as good enough.** It is good enough often, which is why three conftests
-in this portfolio use it and why the failures are surprising.
+across the sibling projects use it and why the failures are surprising.

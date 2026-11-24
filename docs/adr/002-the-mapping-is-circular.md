@@ -30,7 +30,7 @@ whatever is installed. Confirmed on the other side too: **Pillow 12.3.0 installe
 `find_spec("pillow")` still returns None.** Installing the package cannot fix the check.
 
 An earlier version of this reasoning tried to *count* how many name pairs disagree. That was
-the wrong measurement — re-probed across four venvs in this portfolio it gives 1/7, 2/7, 1/7 and
+the wrong measurement — re-probed across four sibling projects' venvs it gives 1/7, 2/7, 1/7 and
 0/7, because it only fires where the package happens to be installed. "Unsatisfiable" is
 environment-independent and strictly stronger.
 

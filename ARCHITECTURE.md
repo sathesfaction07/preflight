@@ -4,7 +4,7 @@
 
 Launches local tools, and says how much its "this will run" actually means.
 
-**Design principle:** the brief marks the accuracy concern for this project *"N/A — it's a
+**Design principle:** the project brief marks the accuracy concern for this project *"N/A — it's a
 launcher."* But a launcher makes exactly one claim — *this tool will run* — and that claim is a
 **prediction about a process it is not running**. There is no N/A; there is a ladder of
 increasingly expensive checks, and none of them reaches the top.
@@ -69,7 +69,7 @@ No model. The accuracy problem is import semantics and arithmetic.
 │                                                                              │
 │  `find_spec(m) is None` -> False, i.e. "available", for a module that CANNOT   │
 │  be imported. That exact expression is a dependency check in THREE conftest    │
-│  files elsewhere in this portfolio.                                          │
+│  files in a sibling project.                                          │
 │                                                                              │
 │  FINDING 2 -- the only sound check IS the import, and it is not free:         │
 │      after find_spec: side effect exists -> False                            │
@@ -187,7 +187,7 @@ No model. The accuracy problem is import semantics and arithmetic.
 │                                                                              │
 │  The static pass is blind to anything     A tool that fails fast gets         │
 │  computed and KNOWS it is:                RETRIED, so failure pushes UP the    │
-│    detect_platform.TOOL_NAME              number the brief wants to           │
+│    detect_platform.TOOL_NAME              number the project brief wants to           │
 │    detect_platform.TOOL_SUMMARY           prioritise by. The worst tool       │
 │    detect_platform.TOOL_REQUIREMENTS      ranks FIRST.                        │
 │    detect_platform.TOOL_INTERPRETER                                          │

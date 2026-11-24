@@ -17,16 +17,16 @@ The planning note for this tool said:
 > **Accuracy concern:** N/A — it's a launcher.
 > **Verdict:** Local-only. Error handling + dependency checks.
 
-The thinnest entry in the strategy document, and "N/A" is the claim worth refuting.
+The thinnest entry in the planning notes, and "N/A" is the claim worth refuting.
 
 A launcher makes exactly **one** claim — *this tool will run* — and that claim is a
 **prediction about a process it is not running**. So there is no N/A here. There is a ladder of
 increasingly expensive checks, and none of them reaches the top.
 
-The diligence check found the mechanisms genuinely absent portfolio-wide — `subprocess`,
+A survey of the sibling projects found the mechanisms genuinely absent from all of them — `subprocess`,
 `sys.executable`, entry points, `pkgutil`, `ast.parse`, `shutil.which`, usage tracking:
 **zero files each**. But it found something better: **`importlib.util.find_spec(X) is None` is
-used as a dependency check in three conftest files** in this portfolio, and it is unsound.
+used as a dependency check in three conftest files** across the sibling projects, and it is unsound.
 
 ---
 
@@ -182,7 +182,7 @@ rank  by launches           by successes
 'transcode-video':  6 launches,  0 worked. 100%
 ```
 
-A tool that fails fast gets **retried**, so failure pushes **up** the very number the brief
+A tool that fails fast gets **retried**, so failure pushes **up** the very number the project brief
 wants to prioritise by. The worst tool ranks first.
 
 And nine tools appear in no log at all. They rank last under both metrics, and a launcher
